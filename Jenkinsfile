@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "ahmed277/pro-app"
-        DOCKER_CREDENTIALS = "pro-app"
+        DOCKER_CREDENTIALS = "dockerhub-creds"
         KUBE_CONFIG = "/home/jenkins/.kube/config"
     }
 
