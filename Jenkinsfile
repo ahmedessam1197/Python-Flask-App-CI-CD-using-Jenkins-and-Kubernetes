@@ -4,18 +4,13 @@ pipeline {
     environment {
         DOCKER_IMAGE = "ahmed277/pro-app"
         DOCKER_CREDENTIALS = "dockerhub-creds"
-        KUBE_CONFIG = "/home/jenkins/.kube/config"
     }
 
     stages {
 
         stage("Build Docker Image") {
             steps {
-                script {
-                    sh """
-                    docker build -t $DOCKER_IMAGE:${BUILD_NUMBER} .
-                    """
-                }
+                sh "docker build -t $DOCKER_IMAGE:${BUILD_NUMBER} ."
             }
         }
 
@@ -33,18 +28,15 @@ pipeline {
 
         stage("Push Image") {
             steps {
-                sh """
-                docker push $DOCKER_IMAGE:${BUILD_NUMBER}
-                """
+                sh "docker push $DOCKER_IMAGE:${BUILD_NUMBER}"
             }
         }
 
         stage("Deploy to Kubernetes") {
             steps {
-                sh """
-                export KUBECONFIG=$KUBE_CONFIG
-                envsubst < k8s/deployment.yaml | kubectl apply -f -
-                """
+                withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
+                    sh "kubectl apply -f k8s/deployment.yaml"
+                }
             }
         }
     }
