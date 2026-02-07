@@ -9,12 +9,6 @@ pipeline {
 
     stages {
 
-        stage("Checkout") {
-            steps {
-                git branch: 'main', url: 'git@github.com:ahmedessam1197/Python-Flask-App-CI-CD-using-Jenkins-and-Kubernetes.git'
-            }
-        }
-
         stage("Build Docker Image") {
             steps {
                 script {
